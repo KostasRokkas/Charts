@@ -1,0 +1,43 @@
+.BarChart {
+    display: grid;
+    grid-template-rows: 1fr max-content;
+    justify-content: center;
+    padding: 1rem;
+    overflow: auto;
+    gap: 20px;
+    align-items: center;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    max-width:100%;
+    max-height:100%;
+
+}
+
+.chart {
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    min-width: 15rem;
+}
+
+.downloadButton {
+    display: grid;
+    align-self: self-start;
+    align-self: start;
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.downloadButton:hover {
+    background-color: rgb(19, 128, 171);
+}
+
+/* Responsive styles */
+@media screen and (min-width: 396px) {
+    .BarChart {
+        grid-template-columns: 1fr max-content;
+        align-items: center;
+    }
+}

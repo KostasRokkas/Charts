@@ -1,0 +1,25 @@
+.App {
+  display: grid;
+  grid-template-rows: max-content 1fr;
+  text-align: center;
+  /* height: 1000vh; */
+}
+
+.navbar {
+  display:grid;
+}
+
+.mainContainer {
+  display: grid;
+  padding: 1rem;
+}
+
+@media screen and (min-width: 680px) {
+  .App {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      text-align: center;
+      /* min-height: 100vh; */
+    }
+}
+

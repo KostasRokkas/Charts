@@ -1,0 +1,55 @@
+/* index.css */
+.Navbar {
+    display: grid;
+    grid-template-rows: max-content 1fr;
+    background-color: rgb(19, 128, 171);
+    padding:1rem;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12);
+   
+}
+
+.header {
+    display: grid;
+    justify-content: center;
+    text-align: left;
+    color: white;
+    box-sizing: border-box;
+    border-bottom: solid 2px white;
+}
+
+.linksSection {
+    display:grid,
+}
+
+.links {
+    display: grid;
+    justify-content: center;
+    padding-top: 1.5rem;
+    overflow: auto;
+}
+
+.link {
+    display: grid;
+    justify-content: center;
+    padding: 0.7rem;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+}
+
+.link:hover {
+    background-color: #6CB4EE;
+    color: yellowgreen;
+    border-radius: 15px;
+}
+
+/* Responsive styles */
+@media screen and (min-width: 680px) {
+    .Navbar {
+            height: 96vh
+        }
+
+    .links {
+        justify-content: center;
+    }
+}
