@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react"; // Importing necessary React hooks
-import * as echarts from "echarts"; // Importing the echarts library for chart creation
-import classes from "./index.module.css"; // Importing CSS module for styling
-import { downloadPdf } from "../../common/downloadPdf"; // Importing the PDF download function
+import React, { useEffect, useRef, useState } from "react";
+import * as echarts from "echarts";
+import classes from "./index.module.css";
+import { downloadPdf } from "../../common/downloadPdf";
 
 /**
  * BarChart component renders a responsive bar chart using ECharts.
