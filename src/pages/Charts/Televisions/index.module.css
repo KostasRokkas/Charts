@@ -1,0 +1,77 @@
+.Televisions {
+    /* display:grid; */
+    grid-template-rows: max-content max-content 1fr;
+}
+
+.title{
+    display:grid;
+}
+
+.filters {
+    display: grid;
+    margin-bottom: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5.7rem;
+}
+
+.filterGroup {
+    display: grid;
+    grid-template-rows: row;
+    padding:1rem;
+    gap:0.4rem
+}
+
+label {
+    font-weight: bold;
+}
+
+select {
+    padding: 0.3rem;
+    font-size: 16px;
+}
+
+.currencyContainer {
+    display: grid;
+}
+
+.chartContainer {
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:1rem
+}
+
+.chart {
+    display:grid;
+    width:100%;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.checkedButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+}
+
+.uncheckedButton {
+    background-color: #f0f0f0;
+    color: black;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+@media screen and (min-width: 1097px) {
+    .chartContainer {
+            grid-template-columns: 1fr 1fr
+        }
+}
+

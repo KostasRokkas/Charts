@@ -1,25 +1,40 @@
 .App {
   display: grid;
-  grid-template-rows: max-content 1fr;
-  text-align: center;
-  /* height: 1000vh; */
+  grid-template-columns: 10rem 1fr;
+  height: 100vh;
+  /* Full viewport height for the layout */
 }
 
 .navbar {
-  display:grid;
+  /* position: fixed; */
+  /* Fix the navbar to the side */
+  top: 0;
+  left: 0;
+  height: 100vh;
+  /* Full height of the viewport */
+  width: auto;
+  /* Adjust width to content or set a fixed width if desired */
+  background-color: rgb(19, 128, 171);
+  padding: 1rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12);
+  overflow: auto;
+  /* Allow scrolling if content in the navbar exceeds viewport height */
+  z-index: 1000;
+  /* Ensure it stays on top of other content */
 }
 
 .mainContainer {
-  display: grid;
+max-width: 100%;
   padding: 1rem;
+  overflow: auto;
+  /* Allow scrolling if content overflows */
+  height: 100vh;
+  /* Full height of the viewport for independent scrolling */
 }
 
 @media screen and (min-width: 680px) {
   .App {
-      display: grid;
-      grid-template-columns: max-content 1fr;
-      text-align: center;
-      /* min-height: 100vh; */
-    }
+    grid-template-columns: auto 1fr;
+    height: 100vh;
+  }
 }
-

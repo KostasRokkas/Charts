@@ -1,5 +1,4 @@
-/* index.css */
-.Navbar {
+/* .Navbar {
     display: grid;
     grid-template-rows: max-content 1fr;
     background-color: rgb(19, 128, 171);
@@ -44,12 +43,94 @@
 }
 
 /* Responsive styles */
-@media screen and (min-width: 680px) {
+/* @media screen and (min-width: 680px) {
     .Navbar {
             height: 96vh
         }
 
     .links {
         justify-content: center;
-    }
+    } */
+
+.Navbar {
+    /* position: fixed; */
+    display: grid;
+    grid-template-rows: max-content 1fr;
+    background-color:rgb(19, 128, 171);
+    padding: 0.7rem;
+    gap: 0.7rem;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12);
+    z-index: 4;
+    height: 100vh;
+    text-align: center;
+    overflow: auto;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+.header {
+    display: grid;
+    text-align: center;
+    color: white;
+    border-bottom: solid 2px white;
+}
+
+.links {
+    display: grid;
+    overflow: auto;
+}
+
+.visible {
+    display: block;
+    /* Show when needed */
+}
+
+.Link {
+    display:grid;
+    justify-content: center;
+    padding: 0.7rem;
+    cursor: pointer;
+    background: none;
+    display: block;
+    color: white;
+    transition: background 0.3s, color 0.3s;
+}
+
+.Link.active {
+    color:  rgb(71, 237, 71);
+}
+
+.Link:hover {
+    background: whiteZz;
+    color:rgb(71, 237, 71);
+}
+
+.linkBody{
+    color:pink
+}
+
+.subLinks {
+    display: grid;
+overflow: auto;
+}
+
+.SubLink {
+    display: grid;
+        justify-content: center;
+        padding: 0.7rem;
+        cursor: pointer;
+        background: none;
+        display: block;
+        color: white;
+        transition: background 0.3s, color 0.3s;
+    padding:0.5rem 0 0.5rem calc(0.7rem * 3)
+}
+
+.SubLink.active {
+    color: rgb(71, 237, 71);
+}
+
+.SubLink:hover {
+    /* box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12); */
+    color: rgb(186, 234, 186);
 }

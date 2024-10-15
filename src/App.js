@@ -1,50 +1,79 @@
+import _ from "lodash";
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import BarChart from "./components/BarChart";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Stereos from "./pages/Charts/Stereos/index.js";
+import Charts from "./pages/Charts/index.js";
+import Navbar from "./components/Navbar/index.js";
 import classes from "./App.module.css";
-import TimelineChart from "./components/TimeLineChart";
-import PieChart from "./components/PieChart ";
+import Televisions from "./pages/Charts/Televisions/index.js";
 
-// Defining the links for navigation
-const links = [
-  {
-    title: "Bar chart", // Title displayed in the navbar
-    id: "BarChart", // Unique ID for the link
-    path: "/barChart", // Path for the route
-    element: <BarChart />, // Element to render for this route
-  },
-  {
-    title: "Pie chart",
-    id: "PieChart",
-    path: "/PieChart",
-    element: <PieChart />,
-  },
-  {
-    title: "Timeline chart",
-    id: "TimeLineChart",
-    path: "/TimeLineChart",
-    element: <TimelineChart />,
-  },
-];
+export function links() {
+  return [
+    {
+      title: "Charts",
+      id: "Charts",
+      path: "/charts",
+      element: <Charts />,
+      inMenu: true,
+      links: [
+        {
+          title: "Stereos",
+          id: "Stereos",
+          path: "/stereos",
+          element: <Stereos />,
+          inMenu: true,
+        },
+        {
+          title: "Televisions",
+          id: "Televisions",
+          path: "/televisions",
+          element: <Televisions />,
+          inMenu: true,
+        },
+      ],
+    },
+  ];
+}
 
 const App = () => {
   return (
-    <Router>
+    <BrowserRouter>
       <div className={classes.App}>
         <div className={classes.navbar}>
-          <Navbar links={links} />
+          <Navbar />
         </div>
         <div className={classes.mainContainer}>
           <Routes>
-            {/* Define the routes for the application */}
-            {links.map((link, idx) => (
-              <Route key={idx} path={link.path} element={link.element} /> // Map through links to create a Route for each
-            ))}
+            {links().map((link, idx) => {
+              const subLinks = _.get(link, "links", []);
+              const hasSubLinks = subLinks.length > 0;
+              return (
+                <React.Fragment key={idx}>
+                  <Route key={idx} path={link.path} element={link.element} />
+                  {hasSubLinks &&
+                    subLinks.map((subLink, sidx) => (
+                      <React.Fragment key={sidx}>
+                        <Route
+                          key={sidx}
+                          path={`${link.path}${subLink.path}`}
+                          element={subLink.element}
+                        />
+                      </React.Fragment>
+                    ))}
+                </React.Fragment>
+              );
+            })}
           </Routes>
         </div>
       </div>
-    </Router>
+      {/* <ReactQueryDevtools initialIsOpen={false} position={"bottom-right"} /> */}
+      <ToastContainer />
+    </BrowserRouter>
+    // </QueryClientProvider>
   );
 };
 

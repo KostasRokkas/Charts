@@ -1,129 +1,113 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
-import { downloadPdf } from "../../common/downloadPdf";
 import classes from "./pie.module.css";
 
-/**
- * PieChart component renders a responsive pie chart using ECharts.
- * It adjusts based on the window size and allows users to download the chart as a PDF.
- */
-const PieChart = () => {
-  const chartRef = useRef(null); // Reference to the chart DOM element
-  const [windowSize, setWindowSize] = useState(window.innerWidth); // State to track the window size
+const PieChart = ({ data, title }) => {
+  const chartRef = useRef(null);
+  const [windowSize, setWindowSize] = useState(window.innerWidth); // State to track window size
 
-  /**
-   * Returns the chart options based on the current window width.
-   * This allows for responsive behavior such as adjusting label font size.
-   *
-   * @param {number} width - The current width of the window.
-   * @returns {object} - ECharts options for the pie chart.
-   */
+  // Get chart options based on window size
   const getChartOptions = (width) => {
     const isMobile = width < 768;
-    const labelFontSize = isMobile ? 10 : 14;
+    const isVerySmallScreen = width < 670; // New condition for very small screens
+    const isBigScreen = width < 1200;
 
     return {
       title: {
-        text: "Basic Pie Chart",
-        top: "5%",
-        left: "center",
+        text: title, // Add the title back
+        top: "2%", // Position the title at 2% from the top
+        left: "center", // Center the title horizontally
         textStyle: {
           fontWeight: "bold",
-          fontSize: windowSize >= 1024 ? 16 : 12,
+          fontSize: isMobile ? "15px" : isBigScreen ? "15px" : "25px", // Responsive font size for the title
         },
       },
       tooltip: {
-        trigger: "item", // Tooltip triggers when hovering over pie items
+        trigger: "item",
+        formatter: (params) => {
+          const total = params.data.total; // Accessing the total from the data
+          return `${params.seriesName}<br/>${params.name}: ${params.value} pieces<br/>Total: ${total}`;
+        },
       },
       legend: {
-        orient: "vertical", // Arrange legend items vertically
-        left: "left", // Align legend to the left
-        bottom: "0%", // Position the legend at the bottom
+        orient: "horizontal",
+        bottom: "0%", // Positioning legend at the bottom
+        left: "center", // Center the legend horizontally
         textStyle: {
-          fontSize: labelFontSize, // Set font size for legend items
+          fontSize: isMobile ? "10" : "12", // Responsive font size for legend text
         },
       },
       series: [
         {
-          name: "Access From",
+          name: "Sales Breakdown",
           type: "pie",
-          radius: ["40%", "70%"], // Inner and outer radius of the pie chart
-          center: ["50%", "50%"], // Keep the pie chart centered
-          avoidLabelOverlap: false, // Prevent label overlap
+          radius: ["15%", "40%"],
+          center: isVerySmallScreen ? ["40%", "50%"] : ["50%", "50%"], // Adjust center based on screen size
+          avoidLabelOverlap: false,
           label: {
-            show: false,
-            position: "center",
+            show: true,
+            formatter: "{b}: {c} pieces", // Show pieces in the label
           },
           emphasis: {
             label: {
-              show: true, // Show label when item is emphasized (hovered)
-              fontSize: labelFontSize, // Font size for emphasized label
-              fontWeight: "bold", // Font weight for emphasized label
+              show: true,
+              fontSize: isMobile ? 14 : 18,
+              fontWeight: "bold",
             },
           },
           labelLine: {
-            show: false, // Do not show the connecting line to the labels
+            show: true,
           },
-          data: [
-            { value: 1048, name: "Search Engine" }, // Data for the pie chart
-            { value: 735, name: "Direct" },
-            { value: 580, name: "Email" },
-            { value: 484, name: "Union Ads" },
-            { value: 300, name: "Video Ads" },
-          ],
+          data: data.map((item) => ({
+            value: item.pieces,
+            name: item.name,
+            total: item.total, // Include total in the data passed to ECharts
+          })),
         },
       ],
     };
   };
 
-  /**
-   * Creates an ECharts instance and sets its options.
-   *
-   * @param {number} width - The current width of the window.
-   * @returns {object} - The ECharts instance.
-   */
+  // Create an ECharts instance and set its options
   const createChartInstance = (width) => {
-    const chartInstance = echarts.init(chartRef.current); // Initialize ECharts instance
-    const options = getChartOptions(width); // Get chart options based on window size
-    chartInstance.setOption(options); // Set options for the chart
+    const chartInstance = echarts.init(chartRef.current);
+    const options = getChartOptions(width);
+    chartInstance.setOption(options);
     return chartInstance;
   };
 
-  /**
-   * Updates the window size state when the window is resized.
-   */
-  const handleResize = () => setWindowSize(window.innerWidth); // Update state with new window width
+  // Handle window resize
+  const handleResize = () => setWindowSize(window.innerWidth);
 
   useEffect(() => {
-    const chartInstance = createChartInstance(windowSize); // Create chart on component mount
-    window.addEventListener("resize", handleResize); // Listen for window resize events
+    const chartInstance = createChartInstance(windowSize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize); // Cleanup event listener on unmount
-      chartInstance.dispose(); // Dispose of the ECharts instance
+      window.removeEventListener("resize", handleResize);
+      chartInstance.dispose();
     };
-  }, [windowSize]); // Only run once on mount
+  }, [windowSize]);
 
   useEffect(() => {
-    const existingChart = echarts.getInstanceByDom(chartRef.current); // Get existing ECharts instance
+    const existingChart = echarts.getInstanceByDom(chartRef.current);
     if (existingChart) {
-      existingChart.setOption(getChartOptions(windowSize)); // Update chart options on window resize
-      existingChart.resize(); // Resize the chart
+      existingChart.setOption(getChartOptions(windowSize));
+      existingChart.resize();
     }
-  }, [windowSize]);
+  }, [data, windowSize]); // Update chart when data changes
+
   return (
     <div id="PieChart" className={classes.PieChart}>
       <div
-        ref={chartRef} // Reference for the ECharts instance
+        ref={chartRef}
         className={classes.chart}
-        style={{ width: "100%", height: "400px" }}
+        style={{
+          width:
+            windowSize > 1200 ? "500px" : windowSize < 768 ? "500px" : "450px",
+          height: windowSize >= 768 ? "300px" : "200px",
+        }}
       />
-      <button
-        className={classes.downloadButton}
-        onClick={() => downloadPdf("PieChart")}
-      >
-        Download PDF
-      </button>
     </div>
   );
 };

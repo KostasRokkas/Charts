@@ -1,3 +1,10 @@
+.html {
+  overflow: hidden!important;
+  /* Prevents double scrollbar */
+  height: 100%;
+  /* Ensures full height usage */
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

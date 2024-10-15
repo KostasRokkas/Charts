@@ -9,31 +9,47 @@ import jsPDF from "jspdf";
  * @param elementId - The ID of the element to download as PDF.
  */
 export const downloadPdf = async (elementId) => {
-  // Retrieve the DOM element by its ID
   const input = document.getElementById(elementId);
 
-  // Check if the element exists
   if (!input) {
     console.error(`Element with id ${elementId} not found`);
-    return; // Exit the function if the element does not exist
+    return;
   }
 
-  // Use html2canvas to create a canvas from the HTML element
-  const canvas = await html2canvas(input);
+  // Capture the input element as canvas
+  const canvas = await html2canvas(input, {
+    scale: 2, // Increase scale for better resolution
+    useCORS: true, // Enable cross-origin images
+  });
 
-  // Convert the canvas to a PNG image data URL
   const imgData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "px",
+    format: "a4",
+  });
 
-  // Create a new jsPDF instance for generating the PDF
-  const pdf = new jsPDF();
+  const imgWidth = pdf.internal.pageSize.getWidth();
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  // Get the width and height of the PDF page
-  const imgWidth = pdf.internal.pageSize.getWidth(); // Width of the PDF page
-  const imgHeight = (canvas.height * imgWidth) / canvas.width; // Height based on aspect ratio
+  let heightLeft = imgHeight;
+  let position = 0;
 
-  // Add the image to the PDF at the specified coordinates (0, 0)
-  pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+  // Add the first page
+  pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
 
-  // Trigger the download of the PDF with the specified filename
-  pdf.save("download.pdf");
+  // Handle multiple pages if content is too long
+  while (heightLeft > 0) {
+    position = heightLeft - pdf.internal.pageSize.getHeight(); // Update position based on remaining height
+    heightLeft -= pdf.internal.pageSize.getHeight();
+
+    if (heightLeft > 0) {
+      // Only add a new page if there is still height left
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    }
+  }
+
+  // Save the generated PDF
+  pdf.save("charts.pdf");
 };
